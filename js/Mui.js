@@ -1,0 +1,170 @@
+/* 
+	Mui - My/Mobile UI
+		- This is my personal mobile ui framework template. Very basic!
+		- This is primarily built for my Android 2.3.6 LG Optimus E400 L3 phone.
+		- Dependent on Zepto.js
+	LM: 11-03-12	
+ */
+Zepto(function () {
+	window.Mui = (function (self, document, z, undefined) {
+		var $root = z(document),
+			$muipages = z('section.mui_page'),
+			$muiHeader = z('#mui_header'),
+			$muiHeaderH1 = $muiHeader.find('h1'),
+			$muiHeaderButtonCon = z('#mui_header_side_button_con'),
+			t = z.trim,
+			pageIndexArr = [],
+			pageScrollPosition = [],
+			headerMarkup = {};
+			
+		var initActivePage = function () {
+			// Make sure to always have an active page on load.
+			if (! $muipages.filter('section.mui_active_page').length) {
+				$muipages.eq(0).addClass('mui_active_page');
+			}
+			$muipages.filter('section.mui_active_page').css('left', '0px').show();
+		};		
+		var makePageIndexArr = function () {
+			var i = 0;
+			$muipages.each(function () {
+				var $me = z(this);
+				$me.attr('data-mui-index',i);
+				pageScrollPosition[this.id] = 0;
+				pageIndexArr[i] = this;
+				i++;
+			});
+		};
+		var getPagesGreaterThanIndex = (function () {
+			var cache = {};
+			return function (_index) {
+				if (!! cache[_index]) {
+					return cache[_index];
+				}
+				var key = _index,
+					i = ++_index,
+					collection = [];
+				while (pageIndexArr[i] !== undefined) {
+					collection.push(pageIndexArr[i]);
+					i++;
+				}
+				cache[key] = z(collection);
+				return cache[key];
+			}
+		})();
+		
+		var resolvePageMinHeight = function () {
+			$muipages.css('minHeight', z(window).height()+'px');
+		};
+		
+		var initEvents = function () {
+			var Events = {
+				scrollPosition: function (e, _$page) {
+					var scrollOffset = pageScrollPosition[_$page[0].id];
+					if (scrollOffset !== undefined) {
+						self.scrollTo(0, scrollOffset);
+					}
+					else { 
+						// If no scroll position was defined, then scroll
+						// to the top.
+						self.scrollTo(0, 0);
+					}	
+				},
+				rememberScrollPosition: function (e, _$page) {
+					pageScrollPosition[_$page[0].id] = window.scrollY;
+				}
+			};			
+			$root.on('mui_beforepagechange', Events.rememberScrollPosition);
+			$root.on('mui_afterpagechange', Events.scrollPosition);
+		};
+		
+		var Mui = {
+			$CURRENT_PAGE: $muipages.filter('section.mui_active_page'),
+			$ROOT: $root,
+			
+			getPageScrollPosition: function (_page) {
+				var p = _page || false;
+				if (!! p) {
+					return pageScrollPosition[p];
+				}
+				return pageScrollPosition;
+			},
+			
+			buildHeaderMarkupForPageId: function (_pageId) {
+				$muiHeader.show();
+				if (headerMarkup[_pageId] !== undefined) {
+					$muiHeaderH1.html(headerMarkup[_pageId].label);
+					$muiHeaderButtonCon.html(headerMarkup[_pageId].buttons);
+					return Mui;
+				}
+				// This code runs when a page is fullscreen (does not have a header) //
+				z('#'+_pageId).css('top', '0px');
+				$muiHeader.hide();
+				return Mui;
+			},
+			
+			gotoPage: (function () {
+				var cache = {};
+				return function (_page, _data) {
+					var pageId = t(_page).replace(/#/ig, ''),				
+						// Get the page to show.
+						$page = (cache[pageId] !== undefined) 
+										? cache[pageId] // Use cache copy if available.
+										: (function () {
+											cache[pageId] = z('#'+pageId);
+											return cache[pageId]; // Save a cache copy
+										})(),							
+						// The data-mui-index value of the previous page.	
+						prevPageIndex = parseInt(Mui.$CURRENT_PAGE.attr('data-mui-index'),10),						
+						// The data-mui-index value of the new page to show.
+						newPageIndex = parseInt($page.attr('data-mui-index'),10),						
+						// Get all the other pages except the new page to show.
+						$otherPages = $muipages.not($page),					
+						// Used as a flag to make sure the onComplete() function only 
+						// runs once every function call to Mui.gotoPage().
+						ran = false; 
+					_data = _data || false;
+					$page.data('sent', '');
+					if (!! _data) { $page.data('sent', _data); }				
+					$page.show();
+					$muipages.removeClass('mui_active_page');				
+					var onComplete = function () {
+						// Make sure to run only once every Mui.gotoPage() call.				
+						if (ran) { return; } ran=true;
+						$page.addClass('mui_active_page');
+						Mui.buildHeaderMarkupForPageId(pageId);
+						$root.trigger('mui_afterpagechange', [$page]);
+						$otherPages.hide();
+					};
+					// The code below controls the page slide left/right functionality //	
+					if (prevPageIndex <= newPageIndex) {
+						$page.animate({left:'0px'}, {complete: onComplete});		
+					}
+					else {	
+						$page.css('left', '0px');
+						getPagesGreaterThanIndex(newPageIndex).animate({left:'1000px'}, {complete: onComplete});	
+					}																	
+					$root.trigger('mui_beforepagechange', [Mui.$CURRENT_PAGE]);	
+					Mui.$CURRENT_PAGE = $page;
+					$root.trigger('mui_pagechange', [$page, _data]);
+					$root.trigger(pageId, [$page, _data]);
+				};
+			})(),
+			
+			setHeaderMarkup: function (_data) {
+				headerMarkup = _data;
+				return Mui;
+			}
+		};
+		
+		// Call all the inital function for Mui here //
+		(function _initialize() {
+			makePageIndexArr();
+			initActivePage();
+			resolvePageMinHeight();
+			initEvents();
+		})();
+		
+		return Mui;
+		
+	})(window, document, Zepto);
+});

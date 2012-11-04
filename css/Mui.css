@@ -1,0 +1,215 @@
+/* 
+	Mui - My/Mobile UI
+		- This is my personal mobile ui framework template. Very basic!
+	LM: 11-03-12	
+ */
+html {
+	margin:0;
+	padding:0;
+}
+body {
+	margin: 0;
+	padding: 0;
+	/* See: http://phonegap.com/2011/07/19/craftyjs-on-android-device-using-phonegap/   [remove highlight on element when tapped] */
+	-webkit-tap-highlight-color:rgba(0,0,0,0);	
+	position: relative;
+}
+
+body * {
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;	
+}
+
+a:hover, 
+a:active,
+a:visited,
+a:link { 
+	outline: none; 
+	color: #666;
+	text-decoration: none;
+}
+
+/* DEV STYLES (LM: 07-27-11)*/
+.hide {
+	display: none; 
+}
+
+.show {
+	display : block;
+}
+
+.visible {
+	visibility : visible;
+}
+
+.invisible {
+	visibility : hidden;
+}
+
+.redb {
+	border: 1px solid red;
+}
+
+.u {
+	text-decoration: underline;
+}
+
+.b {
+	font-weight: bold;
+}
+.i {
+	font-style: italic;
+}
+
+.glow {
+	-webkit-box-shadow: 0 0 10px rgba(50, 50, 50, 0.8);
+	box-shadow: 0 0 10px rgba(50, 50, 50, 0.5);	
+}
+
+.valign-top {
+	vertical-align: top;
+}
+
+.valign-middle {
+	vertical-align: middle;
+}
+
+.valign-bottom {
+	vertical-align: bottom;
+}
+
+.align-r {
+	text-align: right;
+}
+
+.align-l {
+	text-align: left;
+}
+
+.align-j {
+	text-align: justify;
+}
+
+.align-c {
+	text-align: center;
+}
+
+.away {
+	position: absolute;
+	top: -1000px;
+	left: -1000px;
+}
+
+.inline {
+	display: inline;
+}
+
+.block {
+	display: block;
+}
+
+.clr {clear:both; font-size:0; height:0px; line-height:0;}
+/************ end of DEV STYLES ***********/
+
+.left {
+	float: left;
+}
+
+.right {
+	float: right;
+}
+
+.hlight {
+	background-color: #D2EAFE;
+}
+
+.inline_block {
+	display: inline-block;
+}
+.mui_trans {
+	-webkit-transition: left 0.40s linear 0s;
+	transition: left 0.40s linear 0s;
+}
+.mui_page {
+	width: 100%;
+	background-color: #fff;
+	position: absolute;
+	top:50px;
+	left: 1000px;
+	display:none;
+}
+.mui_page:first-child {
+	left: 0;
+}
+.mui_active_page { 
+	z-index: 100;
+}
+#mui_header, 
+#mui_header h1 {
+	margin:0;
+}
+.mui_fullscreen #mui_header {
+	display: none;
+}
+#mui_header {
+	position: fixed;
+	top:0;
+	left:0;
+	min-height: 50px;
+	overflow: hidden;
+	width: 100%;
+	z-index: 200;
+}
+#mui_header h1 {
+	font-size: 15px;
+	padding: 7px;
+	padding-left: 8px;
+	min-height: 50px;
+}
+#mui_header h1 > img {
+	vertical-align: middle;
+	margin-right: 4px;
+	height: 36px;
+}
+#mui_header_side_button_con {
+	position: absolute;
+	top: 0;
+	right: 10px;
+	padding:0;
+	min-height: 50px;
+}
+#mui_header_side_button_con button{
+	background-color: transparent;
+	border: 0;
+	height: 50px;
+	width: 50px;
+	margin:0;
+}
+#mui_header_side_button_con button > img {
+	width: 49px;
+	height: 49px;
+	margin:0 auto;
+}
+.mui_listview {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+.mui_listview li {
+	padding: 0;
+	margin: 0;
+	border-bottom: 1px solid #ccc;
+}
+.mui_listview li:last-child {
+	border: 0;
+}
+.mui_listview li sub {
+	display: block;
+}
+.mui_center {
+	margin: 0 auto !important;
+}
+
+
+
+

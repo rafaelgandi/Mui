@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<!-- See: http://debugfix.com/2011/11/android-browser-css-position-fixed-bug-solved/ -->
+	<meta name="viewport" content="width=100%, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+	<title>Mui Test</title>  
+	<link rel="stylesheet" href="css/Mui.css">
+	<style>
+		body {
+			font-family: arial;
+		}
+		#mui_header {
+			background-color: #62B4C8;
+		}
+		.mui_page h1 {
+			font-size: 14px;
+			padding: 3px;
+		}
+		.mui_listview li {
+			padding: 8px 5px;
+		}
+		.mui_listview li sub {
+			font-size: 12px;
+		}
+		.mui_button_depress {
+			background-color: #ccc !important;
+		}
+	</style>
+</head>
+<body>
+
+
+
+<header id="mui_header" class="glow">
+	<h1></h1>	
+	<span id="mui_header_side_button_con"></span>
+</header>
+
+
+
+<section id="1st_page" class="mui_page mui_active_page">
+
+	<h1>Channels</h1>
+	<ul id="channel_list" class="mui_listview">
+		<li> Testing
+		<li> Lorem Ipsum dolor
+		<li> Lorem Ipsum dolor
+			<sub>This is a sub text on this list item</sub>
+		<li> Lorem Ipsum dolor
+		<li> Lorem Ipsum dolor
+		<li> Lorem Ipsum dolor
+		<li> Lorem Ipsum dolor
+		<li> Lorem Ipsum dolor
+		<li> Lorem Ipsum dolor
+		<li> Lorem Ipsum dolor
+		<li> Lorem Ipsum dolor
+		<li> Lorem Ipsum dolor
+		<li> Lorem Ipsum dolor
+		<li> Lorem Ipsum dolor
+		<li> Lorem Ipsum dolor
+		<li> Lorem Ipsum dolor
+		<li> Lorem Ipsum dolor
+		<li id="test_scroll"> click me to go to page 2
+	</ul>
+
+</section>
+
+<section id="2nd_page" class="mui_page">
+	<h1>Channels</h1>
+	<p>
+		asfasfasdf
+		asdfasfadsf
+	</p>
+</section>
+
+<section id="3rd_page" class="mui_page">
+	<h1>3rd page</h1>
+	<p>
+		<ul class="mui_listview">
+			<li> Lorem Ipsum dolor
+			<li> Lorem Ipsum dolor
+			<li> Lorem Ipsum dolor
+			<li> Lorem Ipsum dolor
+			<li> Lorem Ipsum dolor
+			<li> Lorem Ipsum dolor
+			<li> Lorem Ipsum dolor
+			<li> Lorem Ipsum dolor
+			<li> Lorem Ipsum dolor
+			<li> Lorem Ipsum dolor
+			<li> Lorem Ipsum dolor
+			<li> Lorem Ipsum dolor
+			<li> Lorem Ipsum dolor
+			<li> Lorem Ipsum dolor
+			<li> Lorem Ipsum dolor
+			<li> Lorem Ipsum dolor
+			<li> Lorem Ipsum dolor
+			<li> Lorem Ipsum dolor
+			<li> Lorem Ipsum dolor
+			<li> Lorem Ipsum dolor
+			<li> Lorem Ipsum dolor
+			<li> Lorem Ipsum dolor
+			<li> Lorem Ipsum dolor
+			<li> Lorem Ipsum dolor
+			<li> Lorem Ipsum dolor
+			<li> Lorem Ipsum dolor
+			<li> Lorem Ipsum dolor
+			<li> Lorem Ipsum dolor
+		</ul>
+	</p>
+</section>
+
+<section id="4th_page" class="mui_page">
+	<h1>4th page</h1>
+	<p >
+		
+		<ul id="ptag" class="mui_listview">
+			<li> Lorem Ipsum dolor
+			<li> Lorem Ipsum dolor
+			<li> Lorem Ipsum dolor
+			<li> Lorem Ipsum dolor
+			<li> click to go to 3
+			<li> Lorem Ipsum dolor
+			<li> Lorem Ipsum dolor
+			<li> Lorem Ipsum dolor
+			<li> Lorem Ipsum dolor
+			<li> Lorem Ipsum dolor
+			<li> Lorem Ipsum dolor
+			<li> Lorem Ipsum dolor
+			<li> Lorem Ipsum dolor
+			<li> Lorem Ipsum dolor
+			<li> Lorem Ipsum dolor
+			<li> Lorem Ipsum dolor
+			<li> Lorem Ipsum dolor
+			<li> Lorem Ipsum dolor
+			<li> Lorem Ipsum dolor
+			<li> Lorem Ipsum dolor
+			<li> Lorem Ipsum dolor
+			<li> Lorem Ipsum dolor
+			<li> Lorem Ipsum dolor
+			<li> Lorem Ipsum dolor
+			<li> Lorem Ipsum dolor
+			<li> Lorem Ipsum dolor
+			<li> Lorem Ipsum dolor
+			<li> Lorem Ipsum dolor
+		</ul>
+	</p>
+</section>
+
+
+<script src="js/zepto.min.js"></script>
+<script src="js/Mui.js"></script>
+<script>
+Zepto(function (z) {
+	
+	Mui.setHeaderMarkup({
+		'1st_page': {
+			'label': '<img src="images/test_icon.png">Header',
+			'buttons': '<button id="search"><img src="images/search_icon.png"></button>'+
+					   '<button id="menu3"><img src="images/more_menu.png"></button>'			
+		},
+		'2nd_page': {
+			'label': '<img src="images/test_icon.png">Header 2',
+			'buttons': '<button id="search2"><img src="images/search_icon.png"></button>'+
+					   '<button id="menu2"><img src="images/more_menu.png"></button>'			
+		},
+		'3rd_page': {
+			'label': 'Header 3',
+			'buttons': '<button id="search3"><img src="images/search_icon.png"></button>'+
+					   '<button id="menu1"><img src="images/more_menu.png"></button>'			
+		}
+	})
+	.buildHeaderMarkupForPageId('1st_page');
+
+	Mui.$ROOT.on('tap', '#search3, #test_scroll', function () {
+		Mui.gotoPage('2nd_page');
+	});
+	Mui.$ROOT.on('tap','#search, #search2, #ptag', function () {
+		Mui.gotoPage('3rd_page');
+	});
+	Mui.$ROOT.on('tap','#menu1, #menu2', function () {
+		Mui.gotoPage('1st_page');
+	});
+	
+	Mui.$ROOT.on('tap','#menu3', function () {
+		Mui.gotoPage('4th_page', 'wohooo! full screen');
+	});
+	
+	Mui.$ROOT
+		.on('3rd_page', function () {
+			//console.log('3rdpage');
+		})
+		.on('4th_page', function (e, page, data) {
+			console.log(data);
+		})
+		.on('mui_afterpagechange', function () {
+			//console.log('page changed!!');
+			//console.log(z(window).height());
+		});
+});
+</script>
+</body></html>
