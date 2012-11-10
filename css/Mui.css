@@ -1,7 +1,7 @@
 /* 
 	Mui - My/Mobile UI
 		- This is my personal mobile ui framework template. Very basic!
-	LM: 11-06-12	
+	LM: 11-10-12	
  */
 html {
 	margin:0;
@@ -175,7 +175,7 @@ a:link {
 #mui_header_side_button_con {
 	position: absolute;
 	top: 0;
-	right: 10px;
+	right: 0;
 	padding:0;
 	min-height: 50px;
 }
@@ -183,8 +183,10 @@ a:link {
 	background-color: transparent;
 	border: 0;
 	height: 50px;
-	width: 50px;
+	width: 60px;
 	margin:0;
+	padding:0;
+	margin-left: 1px;
 }
 #mui_header_side_button_con button > img {
 	width: 49px;
