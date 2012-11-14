@@ -49,7 +49,7 @@ Zepto(function () {
 				}
 				cache[key] = z(collection);
 				return cache[key];
-			}
+			};
 		})();
 		
 		var resolvePageMinHeight = function () {
@@ -90,7 +90,7 @@ Zepto(function () {
 			},
 			
 			buildHeaderMarkupForPageId: function (_pageId) {
-				$muiHeader.show();
+				$muiHeader.show();				
 				if (headerMarkup[_pageId] !== undefined) {
 					$muiHeaderH1.html(headerMarkup[_pageId].label);
 					$muiHeaderButtonCon.html(headerMarkup[_pageId].buttons);
@@ -136,12 +136,15 @@ Zepto(function () {
 						$otherPages.hide();
 					};
 					// The code below controls the page slide left/right functionality //	
-					if (prevPageIndex <= newPageIndex) {
-						$page.animate({left:'0px'}, {complete: onComplete});		
+					if (prevPageIndex <= newPageIndex) {						
+						$page.animate({left:'0px'}, {
+							complete: onComplete,
+							easing: 'ease'
+						}); // right to left 			
 					}
 					else {	
 						$page.css('left', '0px');
-						getPagesGreaterThanIndex(newPageIndex).animate({left:'1000px'}, {complete: onComplete});	
+						getPagesGreaterThanIndex(newPageIndex).animate({left:'1000px'}, {complete: onComplete}); // left to right	
 					}																	
 					$root.trigger('mui_beforepagechange', [Mui.$CURRENT_PAGE]);	
 					Mui.$CURRENT_PAGE = $page;
