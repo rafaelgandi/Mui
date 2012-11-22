@@ -53,28 +53,19 @@ Zepto(function () {
 		})();
 		
 		var resolvePageMinHeight = function () {
-			$muipages.css('minHeight', z(window).height()+'px');
+			//$muipages.css('minHeight', z(window).height()+'px');
+			//$muipages.css('minHeight', (self.screen.height+10)+'px');
+			//alert(z(window).height() + ' ==== '+ self.screen.height);
 		};
 		
 		var initEvents = function () {
 			var Events = {
-				scrollPosition: function (e, _$page) {
-					var scrollOffset = pageScrollPosition[_$page[0].id];
-					if (scrollOffset !== undefined) {
-						self.scrollTo(0, scrollOffset);
-					}
-					else { 
-						// If no scroll position was defined, then scroll
-						// to the top.
-						self.scrollTo(0, 0);
-					}	
-				},
 				rememberScrollPosition: function (e, _$page) {
 					pageScrollPosition[_$page[0].id] = window.scrollY;
+					self.scrollTo(0, 0);
 				}
 			};			
 			$root.on('mui_beforepagechange', Events.rememberScrollPosition);
-			$root.on('mui_afterpagechange', Events.scrollPosition);
 		};
 		
 		var Mui = {
@@ -139,12 +130,13 @@ Zepto(function () {
 					if (prevPageIndex <= newPageIndex) {						
 						$page.animate({left:'0px'}, {
 							complete: onComplete,
-							easing: 'ease'
+							easing: 'ease',
+							duration: 200
 						}); // right to left 			
 					}
 					else {	
 						$page.css('left', '0px');
-						getPagesGreaterThanIndex(newPageIndex).animate({left:'1000px'}, {complete: onComplete}); // left to right	
+						getPagesGreaterThanIndex(newPageIndex).animate({left:'700px'}, {complete: onComplete}); // left to right	
 					}																	
 					$root.trigger('mui_beforepagechange', [Mui.$CURRENT_PAGE]);	
 					Mui.$CURRENT_PAGE = $page;
