@@ -136,7 +136,7 @@ a:link {
 	background-color: #fff;
 	position: absolute;
 	top:50px;
-	left: 700px; /* If you change this you also need to change it in the Mui.js file */
+	left: 800px; /* If you change this you also need to change it in the Mui.js file */
 	display:none;
 	min-height: 360px; /* Specific for my LG Optimus L3 screen */
 	overflow-x: hidden;
@@ -156,9 +156,9 @@ a:link {
 }
 #mui_header {
 	position: fixed;
-	top:0;
+	top:-2px;
 	left:0;
-	min-height: 50px;
+	min-height: 52px;
 	overflow: hidden;
 	width: 100%;
 	z-index: 200;
