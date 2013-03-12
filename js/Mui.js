@@ -3,7 +3,7 @@
 		- This is my personal mobile ui framework template. Very basic!
 		- This is primarily built for my Android 2.3.6 LG Optimus E400 L3 phone.
 		- Dependent on Zepto.js
-	LM: 12-06-12	
+	LM: 03-12-13	
  */
 Zepto(function () {
 	window.Mui = (function (self, document, z, undefined) {
@@ -22,63 +22,41 @@ Zepto(function () {
 			if (! $muipages.filter('section.mui_active_page').length) {
 				$muipages.eq(0).addClass('mui_active_page');
 			}
-			$muipages.filter('section.mui_active_page').css('left', '0px').show();
-		};		
-		var makePageIndexArr = function () {
-			var i = 0;
-			$muipages.each(function () {
-				var $me = z(this);
-				$me.attr('data-mui-index',i);
-				pageScrollPosition[this.id] = 0;
-				pageIndexArr[i] = this;
-				i++;
-			});
-		};
-		var getPagesGreaterThanIndex = (function () {
-			var cache = {};
-			return function (_index) {
-				if (!! cache[_index]) {
-					return cache[_index];
-				}
-				var key = _index,
-					i = ++_index,
-					collection = [];
-				while (pageIndexArr[i] !== undefined) {
-					collection.push(pageIndexArr[i]);
-					i++;
-				}
-				cache[key] = z(collection);
-				return cache[key];
-			};
-		})();
+			$muipages.filter('section.mui_active_page').show();
+		};				
 		
 		var resolvePageMinHeight = function () {
-			//$muipages.css('minHeight', z(window).height()+'px');
+			$muipages.css('minHeight', z(window).height()+'px');
 			//$muipages.css('minHeight', (self.screen.height+10)+'px');
 			//alert(z(window).height() + ' ==== '+ self.screen.height);
+		};
+		
+		var getPageScrollPosition = function (_page) {
+			var p = _page || false;
+			if (!! p) {
+				return (!! pageScrollPosition[p]) ? pageScrollPosition[p] : 0;
+			}
+			return 0;
 		};
 		
 		var initEvents = function () {
 			var Events = {
 				rememberScrollPosition: function (e, _$page) {
 					pageScrollPosition[_$page[0].id] = self.scrollY;
-					self.scrollTo(0, 0);	
+					//self.scrollTo(0, 0);	
+				},
+				setScrollPosition: function (e, _$page) {
+					self.scrollTo(0, getPageScrollPosition(_$page[0].id));	
 				}
 			};			
 			$root.on('mui_beforepagechange', Events.rememberScrollPosition);
+			$root.on('mui_afterpagechange', Events.setScrollPosition);
 		};
 		
 		var Mui = {
 			$CURRENT_PAGE: $muipages.filter('section.mui_active_page'),
 			$ROOT: $root,
-			
-			getPageScrollPosition: function (_page) {
-				var p = _page || false;
-				if (!! p) {
-					return pageScrollPosition[p];
-				}
-				return 0;
-			},
+			getPageScrollPosition: getPageScrollPosition,
 			
 			buildHeaderMarkupForPageId: function (_pageId) {
 				$muiHeader.show();				
@@ -103,56 +81,23 @@ Zepto(function () {
 										: (function () {
 											cache[pageId] = z('#'+pageId);
 											return cache[pageId]; // Save a cache copy
-										})(),							
-						// The data-mui-index value of the previous page.	
-						prevPageIndex = parseInt(Mui.$CURRENT_PAGE.attr('data-mui-index'),10),						
-						// The data-mui-index value of the new page to show.
-						newPageIndex = parseInt($page.attr('data-mui-index'),10),						
+										})(),																		
 						// Get all the other pages except the new page to show.
-						$otherPages = $muipages.not($page),					
-						// Used as a flag to make sure the onComplete() function only 
-						// runs once every function call to Mui.gotoPage().
-						ran = false; 
+						$otherPages = $muipages.not($page); 
 					_data = _data || false;
 					$page.data('sent', '');
-					if (!! _data) { $page.data('sent', _data); }				
-					$page.show();
-					$muipages.removeClass('mui_active_page');
-					
-					var onComplete = function () {
-						// Make sure to run only once every Mui.gotoPage() call.				
-						if (ran) { return; } ran=true;						
-						$page.addClass('mui_active_page').show();														
-						$root.trigger('mui_afterpagechange', [$page]);
-						$otherPages.hide();						
-					};					
-					// The code below controls the page slide left/right functionality //	
-					if (prevPageIndex <= newPageIndex) {					
-						$page.animate({						
-							'left':'0px'
-						}, {
-							complete: onComplete,
-							duration: 300
-							// Removed easing here because it tends to bogdown the  animation
-							// on android 4.0.4... wierdness
-							// easing: 'ease'
-							// LM: 12-04-12	
-						}); // right to left					
-						
-					}
-					else {	
-						$page.css('left', '0px');
-						getPagesGreaterThanIndex(newPageIndex).animate({							
-							// If you change this you also need to change the 
-							// .mui_page selector in the Mui.css file.
-							'left':'800px' 
-						}, {complete: onComplete}); // left to right											
-					}
-					Mui.buildHeaderMarkupForPageId(pageId);
+					if (!! _data) { $page.data('sent', _data); }					
 					$root.trigger('mui_beforepagechange', [Mui.$CURRENT_PAGE]);	
+					
+					$page.addClass('mui_active_page').show();	
+					
+					Mui.buildHeaderMarkupForPageId(pageId);
+					$otherPages.removeClass('mui_active_page').hide();	
+					
 					Mui.$CURRENT_PAGE = $page;
 					$root.trigger('mui_pagechange', [$page, _data]);
 					$root.trigger(pageId, [$page, _data]);
+					$root.trigger('mui_afterpagechange', [$page]);					
 				};
 			})(),
 			
@@ -164,7 +109,6 @@ Zepto(function () {
 		
 		// Call all the inital function for Mui here //
 		(function _initialize() {
-			makePageIndexArr();
 			initActivePage();
 			resolvePageMinHeight();
 			initEvents();

@@ -132,20 +132,19 @@ a:link {
 	transition: left 0.40s linear 0s;
 }
 .mui_page {
+	/* position:relative; 
+	top:50px; left:0; */	
 	width: 100%;
 	background-color: #fff;
-	position: absolute;
-	top:50px;
-	left: 800px; /* If you change this you also need to change it in the Mui.js file */
 	display:none;
-	min-height: 360px; /* Specific for my LG Optimus L3 screen */
-	overflow-x: hidden;
+	min-height:360px; /* Specific for my LG Optimus L3 screen */
+	overflow:auto;
+	overflow-x: hidden;	
+	margin-top: 50px;
 }
-.mui_page:first-child {
-	left: 0;
-}
-.mui_active_page { 
-	z-index: 100;
+.mui_active_page { 	
+	display:block;
+	z-index:10;
 }
 #mui_header, 
 #mui_header h1 {
@@ -155,17 +154,17 @@ a:link {
 	display: none;
 }
 #mui_header {
-	position: fixed;
-	top:-2px;
-	left:0;
-	min-height: 52px;
+	position:fixed; 
+	z-index:2;
+	top:0; left:0;
+	width:100%;
+	line-height:50px;
+	min-height: 50px;
 	overflow: hidden;
-	width: 100%;
-	z-index: 200;
 }
 #mui_header h1 {
 	font-size: 15px;
-	padding: 7px;
+	padding: 0;
 	padding-left: 8px;
 	min-height: 50px;
 }
@@ -215,6 +214,19 @@ a:link {
 	margin: 0 auto !important;
 }
 
-
+/* LM: 03-05-13 */
+/* .mui_iscroll_wrapper {
+	position:absolute; z-index:1;
+	top:45px; bottom:48px; left:0;
+	width:100%;
+	background:#aaa;
+	overflow:auto;
+} */
+.mui_iscroll_scroller {
+	position:absolute; z-index:1;
+	-webkit-tap-highlight-color:rgba(0,0,0,0);
+	width:100%;
+	padding:0;
+}
 
 
